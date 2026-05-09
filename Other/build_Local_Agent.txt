@@ -1,0 +1,1 @@
+For 3rd Sems claud code free built it using ollama and docker

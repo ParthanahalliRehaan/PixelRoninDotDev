@@ -1,0 +1,373 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-mono); }
+.root { padding: 1.5rem 0; }
+.section-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 1rem; font-weight: 500; }
+.phase-grid { display: flex; flex-direction: column; gap: 10px; }
+.phase { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+.phase-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; background: var(--color-background-primary); user-select: none; }
+.phase-header:hover { background: var(--color-background-secondary); }
+.phase-num { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 4px; min-width: 60px; text-align: center; }
+.phase-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); flex: 1; }
+.phase-duration { font-size: 11px; color: var(--color-text-tertiary); }
+.phase-chevron { font-size: 14px; color: var(--color-text-tertiary); transition: transform 0.2s; }
+.phase-chevron.open { transform: rotate(180deg); }
+.phase-body { display: none; border-top: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+.phase-body.open { display: block; }
+.module-list { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+.module { display: flex; gap: 10px; align-items: flex-start; }
+.module-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+.module-content { flex: 1; }
+.module-name { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.module-desc { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; line-height: 1.5; }
+.tech-pills { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.pill { font-size: 10px; padding: 2px 7px; border-radius: 4px; font-family: var(--font-mono); border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); }
+.arch-section { margin-bottom: 1.5rem; }
+.arch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.arch-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+.arch-card-label { font-size: 10px; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.arch-card-items { display: flex; flex-wrap: wrap; gap: 4px; }
+.stack-pill { font-size: 11px; padding: 3px 8px; border-radius: 4px; font-family: var(--font-mono); font-weight: 500; }
+.p1-color { background: #E6F1FB; color: #0C447C; }
+.p2-color { background: #EAF3DE; color: #3B6D11; }
+.p3-color { background: #FAEEDA; color: #854F0B; }
+.p4-color { background: #FAECE7; color: #993C1D; }
+.p5-color { background: #EEEDFE; color: #3C3489; }
+.p6-color { background: #E1F5EE; color: #0F6E56; }
+.sep { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.5rem 0; }
+.flow-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
+.flow-box { font-size: 11px; padding: 4px 10px; border: 0.5px solid var(--color-border-secondary); border-radius: 4px; color: var(--color-text-secondary); font-family: var(--font-mono); }
+.flow-arrow { color: var(--color-text-tertiary); font-size: 12px; }
+.notice { font-size: 12px; color: var(--color-text-secondary); background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 14px; margin-top: 1rem; line-height: 1.6; }
+</style>
+
+<div class="root">
+<h2 class="sr-only">PixelRonin.dev architecture and development phases</h2>
+
+<div class="arch-section">
+  <div class="section-label">Stack assignment</div>
+  <div class="arch-grid">
+    <div class="arch-card">
+      <div class="arch-card-label">Frontend (Next.js app)</div>
+      <div class="arch-card-items">
+        <span class="stack-pill p1-color">Next.js 14</span>
+        <span class="stack-pill p1-color">TypeScript</span>
+        <span class="stack-pill p1-color">Tailwind</span>
+        <span class="stack-pill p1-color">Phaser 3</span>
+        <span class="stack-pill p1-color">Monaco</span>
+        <span class="stack-pill p1-color">Zustand</span>
+      </div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-card-label">Backend (Hono on Workers)</div>
+      <div class="arch-card-items">
+        <span class="stack-pill p2-color">Hono</span>
+        <span class="stack-pill p2-color">Drizzle ORM</span>
+        <span class="stack-pill p2-color">Neon Postgres</span>
+        <span class="stack-pill p2-color">Better Auth</span>
+        <span class="stack-pill p2-color">Zod</span>
+      </div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-card-label">Infrastructure</div>
+      <div class="arch-card-items">
+        <span class="stack-pill p3-color">CF Pages</span>
+        <span class="stack-pill p3-color">CF Workers</span>
+        <span class="stack-pill p3-color">R2 (assets)</span>
+        <span class="stack-pill p3-color">KV (sessions)</span>
+      </div>
+    </div>
+    <div class="arch-card">
+      <div class="arch-card-label">Code execution (MVP)</div>
+      <div class="arch-card-items">
+        <span class="stack-pill p4-color">Judge0 (free)</span>
+        <span class="stack-pill p4-color">→ Piston later</span>
+        <span class="stack-pill p4-color">test runner</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<div class="section-label">Gameplay data flow</div>
+<div class="flow-row">
+  <div class="flow-box">Phaser canvas</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">Zustand events</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">React UI layer</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">Monaco modal</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">Hono API</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">Judge0</div>
+</div>
+<div class="flow-row">
+  <div class="flow-box">Hono API</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">Drizzle/Postgres</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">XP/reward calc</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">Zustand update</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-box">game continues</div>
+</div>
+
+<div class="sep"></div>
+
+<div class="section-label">Development phases — click to expand</div>
+<div class="phase-grid" id="phases">
+
+  <div class="phase">
+    <div class="phase-header" data-phase="0">
+      <span class="phase-num p1-color">Phase 1</span>
+      <span class="phase-title">Project skeleton + auth</span>
+      <span class="phase-duration">Week 1–2</span>
+      <i class="ti ti-chevron-down phase-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="phase-body">
+      <div class="module-list">
+        <div class="module">
+          <div class="module-dot" style="background:#185FA5"></div>
+          <div class="module-content">
+            <div class="module-name">Monorepo setup</div>
+            <div class="module-desc">apps/web (Next.js) + apps/api (Hono Worker) + packages/db (Drizzle schema). Shared types via packages/types.</div>
+            <div class="tech-pills"><span class="pill">turborepo</span><span class="pill">pnpm workspaces</span><span class="pill">tsconfig</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#185FA5"></div>
+          <div class="module-content">
+            <div class="module-name">Auth flows</div>
+            <div class="module-desc">Better Auth on the Hono API. Email+password + GitHub OAuth. Sessions stored in Neon. Middleware guards on protected routes.</div>
+            <div class="tech-pills"><span class="pill">better-auth</span><span class="pill">hono middleware</span><span class="pill">neon</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#185FA5"></div>
+          <div class="module-content">
+            <div class="module-name">DB schema v1</div>
+            <div class="module-desc">users, sessions, progress, daily_quests tables. Drizzle migrations from day one — never alter prod manually.</div>
+            <div class="tech-pills"><span class="pill">drizzle-orm</span><span class="pill">drizzle-kit</span><span class="pill">zod schemas</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#185FA5"></div>
+          <div class="module-content">
+            <div class="module-name">Deploy pipeline</div>
+            <div class="module-desc">CF Pages for frontend, CF Workers for API. GitHub Actions: lint → typecheck → deploy on main push.</div>
+            <div class="tech-pills"><span class="pill">wrangler</span><span class="pill">cf pages</span><span class="pill">github actions</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header" data-phase="1">
+      <span class="phase-num p2-color">Phase 2</span>
+      <span class="phase-title">Game engine foundation</span>
+      <span class="phase-duration">Week 3–4</span>
+      <i class="ti ti-chevron-down phase-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="phase-body">
+      <div class="module-list">
+        <div class="module">
+          <div class="module-dot" style="background:#3B6D11"></div>
+          <div class="module-content">
+            <div class="module-name">Phaser 3 integration</div>
+            <div class="module-desc">Dynamic import Phaser inside a React wrapper component. Canvas renders in a div, React UI overlays on top via absolute positioning. Critical: Phaser and React must NOT share the same DOM update cycle.</div>
+            <div class="tech-pills"><span class="pill">phaser 3</span><span class="pill">dynamic import</span><span class="pill">useEffect mount</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#3B6D11"></div>
+          <div class="module-content">
+            <div class="module-name">Player + world</div>
+            <div class="module-desc">Tilemap (Tiled editor → JSON), player sprite with run/idle/attack animations, camera follow, physics with Arcade. One level fully playable.</div>
+            <div class="tech-pills"><span class="pill">tiled</span><span class="pill">arcade physics</span><span class="pill">spritesheet</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#3B6D11"></div>
+          <div class="module-content">
+            <div class="module-name">Game ↔ React bridge</div>
+            <div class="module-desc">Zustand store as the bridge. Phaser fires events (BOSS_ENCOUNTERED, CONCEPT_TRIGGERED) → Zustand state changes → React renders the appropriate modal/panel. One-way data flow.</div>
+            <div class="tech-pills"><span class="pill">zustand</span><span class="pill">phaser events</span><span class="pill">event emitter</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header" data-phase="2">
+      <span class="phase-num p3-color">Phase 3</span>
+      <span class="phase-title">Code challenge system</span>
+      <span class="phase-duration">Week 5–6</span>
+      <i class="ti ti-chevron-down phase-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="phase-body">
+      <div class="module-list">
+        <div class="module">
+          <div class="module-dot" style="background:#854F0B"></div>
+          <div class="module-content">
+            <div class="module-name">Monaco Editor modal</div>
+            <div class="module-desc">Full-screen modal with Monaco, language selector, test result panel. Lazy-loaded — don't ship it until the boss fight triggers. Render inside a React portal so it sits above the Phaser canvas.</div>
+            <div class="tech-pills"><span class="pill">@monaco-editor/react</span><span class="pill">react portal</span><span class="pill">lazy()</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#854F0B"></div>
+          <div class="module-content">
+            <div class="module-name">Code execution API</div>
+            <div class="module-desc">Hono route that proxies to Judge0. User submits code → Worker sends to Judge0 → polls result → returns pass/fail + stdout. Never expose Judge0 directly to the client.</div>
+            <div class="tech-pills"><span class="pill">judge0</span><span class="pill">hono proxy</span><span class="pill">zod validation</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#854F0B"></div>
+          <div class="module-content">
+            <div class="module-name">Challenge data model</div>
+            <div class="module-desc">challenges table: id, title, description, starter_code, test_cases (JSONB), xp_reward, boss_id. Seed 4 challenges for daily quest day 1.</div>
+            <div class="tech-pills"><span class="pill">drizzle</span><span class="pill">jsonb</span><span class="pill">db seed</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header" data-phase="3">
+      <span class="phase-num p4-color">Phase 4</span>
+      <span class="phase-title">Progression + daily quests</span>
+      <span class="phase-duration">Week 7–8</span>
+      <i class="ti ti-chevron-down phase-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="phase-body">
+      <div class="module-list">
+        <div class="module">
+          <div class="module-dot" style="background:#993C1D"></div>
+          <div class="module-content">
+            <div class="module-name">XP + leveling engine</div>
+            <div class="module-desc">Pure function: calculateXP(baseXP, timeBonus, streakMultiplier). Stored in DB on challenge completion. Level thresholds defined in a config file — easy to tune.</div>
+            <div class="tech-pills"><span class="pill">pure fn</span><span class="pill">db transaction</span><span class="pill">optimistic UI</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#993C1D"></div>
+          <div class="module-content">
+            <div class="module-name">Daily quest reset</div>
+            <div class="module-desc">Cloudflare Cron Trigger on the Worker: runs at 00:00 UTC, assigns 4 random bosses to each active user's daily_quests row. No third-party scheduler needed.</div>
+            <div class="tech-pills"><span class="pill">cf cron trigger</span><span class="pill">wrangler.toml</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#993C1D"></div>
+          <div class="module-content">
+            <div class="module-name">Profile + dashboard</div>
+            <div class="module-desc">Next.js RSC page. Fetches user stats server-side. Shows XP bar, level, daily quest progress, streak counter. No client-side data fetching needed here.</div>
+            <div class="tech-pills"><span class="pill">RSC</span><span class="pill">server components</span><span class="pill">hono fetch</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header" data-phase="4">
+      <span class="phase-num p5-color">Phase 5</span>
+      <span class="phase-title">Polish + content pipeline</span>
+      <span class="phase-duration">Week 9–10</span>
+      <i class="ti ti-chevron-down phase-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="phase-body">
+      <div class="module-list">
+        <div class="module">
+          <div class="module-dot" style="background:#534AB7"></div>
+          <div class="module-content">
+            <div class="module-name">Concept cards</div>
+            <div class="module-desc">MDX-based concept pages triggered mid-level. Rendered in a React modal. Store read/unread state in Zustand (persist to DB on close).</div>
+            <div class="tech-pills"><span class="pill">mdx</span><span class="pill">next-mdx-remote</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#534AB7"></div>
+          <div class="module-content">
+            <div class="module-name">Sound + animations</div>
+            <div class="module-desc">Phaser audio manager for game SFX. CSS animations for UI (boss defeat, XP pop). Keep audio assets in CF R2, load on demand.</div>
+            <div class="tech-pills"><span class="pill">phaser audio</span><span class="pill">r2</span><span class="pill">css keyframes</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#534AB7"></div>
+          <div class="module-content">
+            <div class="module-name">Admin challenge editor</div>
+            <div class="module-desc">Simple protected Next.js admin route. Form to create/edit challenges. This is your content pipeline — no CMS needed for MVP.</div>
+            <div class="tech-pills"><span class="pill">admin middleware</span><span class="pill">react hook form</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header" data-phase="5">
+      <span class="phase-num p6-color">Phase 6</span>
+      <span class="phase-title">MVP launch prep</span>
+      <span class="phase-duration">Week 11–12</span>
+      <i class="ti ti-chevron-down phase-chevron" aria-hidden="true"></i>
+    </div>
+    <div class="phase-body">
+      <div class="module-list">
+        <div class="module">
+          <div class="module-dot" style="background:#0F6E56"></div>
+          <div class="module-content">
+            <div class="module-name">Leaderboard</div>
+            <div class="module-desc">Simple Hono endpoint: SELECT top 20 users by XP. Cache in CF KV with 5-min TTL. Don't over-engineer this — it's a read query.</div>
+            <div class="tech-pills"><span class="pill">cf kv</span><span class="pill">cache-control</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#0F6E56"></div>
+          <div class="module-content">
+            <div class="module-name">Error tracking + analytics</div>
+            <div class="module-desc">Sentry for errors (free tier). Plausible or CF Analytics for page views. Add to both frontend and Hono API.</div>
+            <div class="tech-pills"><span class="pill">sentry</span><span class="pill">plausible</span></div>
+          </div>
+        </div>
+        <div class="module">
+          <div class="module-dot" style="background:#0F6E56"></div>
+          <div class="module-content">
+            <div class="module-name">Rate limiting + security</div>
+            <div class="module-desc">Hono rate limiter middleware on /api/submit. Input sanitization via Zod on every route. CORS locked to your domain. Done.</div>
+            <div class="tech-pills"><span class="pill">hono/rate-limiter</span><span class="pill">zod</span><span class="pill">cors</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="notice">
+  <strong>MVP scope rule:</strong> phases 1–4 are the shippable MVP. Phase 5–6 make it production. Resist adding new features until phase 4 is complete and someone has actually played through a full quest loop.
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll('.phase-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const body = header.nextElementSibling;
+    const chevron = header.querySelector('.phase-chevron');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    chevron.classList.toggle('open', !isOpen);
+  });
+});
+</script>

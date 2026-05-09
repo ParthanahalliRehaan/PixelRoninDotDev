@@ -1,0 +1,78 @@
+60-day roadmap
+Days 1-10: foundation
+
+Day 1: Define MVP scope, freeze v1 requirements, set naming conventions, create repo.
+Day 2: Set up pnpm workspace, Turborepo, root scripts, shared tsconfig/eslint/prettier.
+Day 3: Create apps/web, apps/api, packages/types, packages/db structure.
+Day 4: Bootstrap Next.js app with Tailwind, App Router, base layout, homepage shell.
+Day 5: Bootstrap Hono API worker, health route, CORS, logger, local dev wiring.
+Day 6: Set up Drizzle schema foundation, migration flow, env handling, Neon connection pattern.
+Day 7: Create shared type package for challenge, user, game, submit, progress shapes.
+Day 8: Add Zustand store skeleton for game state, modal state, auth state.
+Day 9: Set up deployment targets, CF Pages for web, CF Workers for API, basic CI pipeline.
+Day 10: Review architecture, clean folder boundaries, document “future stack swap” points.
+
+Days 11-20: auth, database, API core
+
+Day 11: Implement user table, session/auth-related schema, seed data strategy.
+Day 12: Wire Better Auth into Hono routes, start with email/password login flow.
+Day 13: Add register flow, validation, password hashing, error states.
+Day 14: Add protected route middleware, session checks, logout flow.
+Day 15: Build login page in Next.js, form states, redirects, loading states.
+Day 16: Build register page, client-side validation, auth feedback UI.
+Day 17: Add user profile route and basic dashboard shell.
+Day 18: Implement /api/health, /api/me, /api/progress endpoints.
+Day 19: Add Drizzle migrations and seed script for initial dev content.
+Day 20: Test full auth loop end to end: sign up, sign in, session, user row, dashboard.
+
+Days 21-30: game engine foundation
+
+Day 21: Create Phaser canvas wrapper in React with dynamic import and cleanup.
+Day 22: Set up Phaser scene lifecycle, preload, create, update, and scene switching.
+Day 23: Build player movement, idle/run/attack animations, camera follow.
+Day 24: Add tilemap-backed world using Tiled JSON and collision layers.
+Day 25: Create first playable level with basic interactions and environment props.
+Day 26: Establish Phaser-to-Zustand bridge for boss encounter and UI events.
+Day 27: Add concept trigger events and state transitions between exploration and modal views.
+Day 28: Implement basic HUD overlay: XP, level, quest count, current objective.
+Day 29: Add placeholder boss intro sequence and transition animation.
+Day 30: Playtest the loop: explore → encounter trigger → modal open → return to play.
+
+Days 31-40: code challenge system + asset production
+
+Day 31: Design challenge data model in detail: title, description, starter code, tests, XP.
+Day 32: Seed first challenge set, at least 4 to 6 boss fights for testing.
+Day 33: Build Monaco Editor modal, lazy load it, render above Phaser canvas.
+Day 34: Add language selection, reset code, and test result panel in the editor modal.
+Day 35: Create /api/submit proxy flow to Judge0 with validation and response parsing.
+Day 36: Connect submit flow to UI, show pass/fail, stdout, failed test details.
+Day 37: Make the first complete boss-fight loop playable from start to finish.
+Day 38: Produce character set v1: player, 2-3 enemies, 4-6 boss portraits/sprites.
+Day 39: Produce background set v1: world tiles, battle scenes, modal backdrops, UI accents.
+Day 40: Produce music/SFX v1: exploration loop, battle loop, success/fail sounds, UI clicks.
+
+Days 41-50: progression, quests, dashboard, content pipeline
+
+Day 41: Implement XP calculation function and leveling thresholds.
+Day 42: Write challenge completion persistence, reward XP, update level, store progress.
+Day 43: Add streak tracking and daily quest schema logic.
+Day 44: Build daily quest assignment endpoint and cron-triggered reset job.
+Day 45: Create dashboard page with stats, streak, quest progress, and level bar.
+Day 46: Add quest list UI and completion states with server-fed data.
+Day 47: Add concept cards or lore screens for mid-level educational/story moments.
+Day 48: Build admin challenge editor for creating and editing challenge content.
+Day 49: Add admin protection, form validation, and seed/export workflow.
+Day 50: Review content pipeline so you can add characters, backgrounds, bosses, and quests without touching core code.
+
+Days 51-60: polish, stability, launch prep
+
+Day 51: Add leaderboard endpoint, cache layer, and leaderboard UI.
+Day 52: Add error tracking, logging, and analytics.
+Day 53: Add rate limiting, input sanitization, and security headers.
+Day 54: Improve loading states, empty states, and failure recovery flows.
+Day 55: Add sound polish, victory animations, XP popups, defeat feedback.
+Day 56: Fix mobile/responsive issues, canvas scaling, modal overflow, and readability.
+Day 57: Run full QA pass on auth, gameplay, submit flow, quest reset, dashboard, admin.
+Day 58: Performance pass: bundle audit, lazy loading, asset compression, caching.
+Day 59: Deployment rehearsal on preview, verify env vars, migrations, and cron behavior.
+Day 60: Production launch, freeze v1, and write the post-launch bug list for v1.1.
