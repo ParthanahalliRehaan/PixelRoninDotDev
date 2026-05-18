@@ -1,4 +1,0 @@
-Eg,
-Day 2: Set up pnpm workspace, Turborepo, root scripts, shared tsconfig/eslint/prettier.
-
-Ask chatGPT or Other What is ..........? Why is .........? How to ........?

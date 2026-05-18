@@ -1,0 +1,329 @@
+***
+
+## Big-picture architecture
+
+- PixelRonin:
+  - Simple website (marketing, login/register, dashboard, “Play FirewallSamurai” button).
+  - Stack: Node.js + Express, server-rendered HTML (EJS or plain templates), PostgreSQL for users, progress, achievements. [community.webshinetech](https://community.webshinetech.com/t/best-tech-stack-for-creating-a-multiplayer-social-game-in-a-browser/1612)
+- FirewallSamurai:
+  - Browser 2D game using Kaboom.js (very beginner-friendly JS game library focused on fast, fun 2D games). [kaboomjs](https://kaboomjs.com/doc/intro)
+  - Initially: all state in memory + localStorage, no backend, single-page HTML + JS bundle.
+  - Later: API calls to Express backend to sync progress, achievements, certificates into PixelRonin DB.
+
+***
+
+## Tech stack choice
+
+- Game engine:
+  - Kaboom.js: JS library designed to make 2D games “fast and fun”, with simple functions like `kaboom()`, `add()`, `sprite()`, `pos()`, and built-in physics and collision. [kaboomjs](https://kaboomjs.com)
+  - Excellent for your current vanilla JS level, and lighter to learn than a big framework like Phaser or Unity. [hive](https://hive.blog/hive-169321/@wlffreitas/introduction-to-phaser-3-getting-started-with-the-game-framework-in-javascript-english-portugues)
+- Web/backend:
+  - Language: JavaScript everywhere (frontend + Node.js backend), matches what you already know (HTML/CSS/JS, REST, Node/Express).
+  - Backend: Node.js + Express REST API, PostgreSQL (hosted DB like Supabase/Postgres, accessed only from backend for security). [perplexity](https://www.perplexity.ai/search/5bba6c1d-6ade-4caa-a21c-158c12d19363)
+  - Auth: Cookie+session based login (email/password first, OAuth later if needed).
+
+***
+
+## 60-day “dawn” roadmap
+
+Each dawn is one focused work session (1–4 hours).  
+Days 1–40 = gameplay + core systems; days 41–60 = backend, accounts, certificates.
+
+### Dawns 1–10: Groundwork and basic game
+
+- Dawn 1:
+  - Install Node.js, Git, VS Code.
+  - Create a single repo `pixelronin-firewallsamurai`.
+  - Make `game/` folder with `index.html`, `game.js`, `style.css`.
+
+- Dawn 2:
+  - Read Kaboom intro and run the Dino-like example to confirm setup. [kaboomjs](https://kaboomjs.com/doc/intro)
+  - Load Kaboom via CDN in `index.html` and call `kaboom()` to show blank canvas. [kaboomjs](https://kaboomjs.com)
+
+- Dawn 3:
+  - Add a simple player sprite (even a colored rectangle) with `add()`, `pos()`, `area()`, `body()`. [kaboomjs](https://kaboomjs.com)
+  - Implement left/right movement and jump with `onKeyDown` / `onKeyPress`.
+
+- Dawn 4:
+  - Build a flat level: floor, a few platforms using `add()` rectangles or a simple ASCII-based level via `addLevel()`. [dev](https://dev.to/ritza/build-a-physics-playground-with-kaboomjs-5hcg)
+  - Add camera follow on player if needed.
+
+- Dawn 5:
+  - Add basic enemies (simple moving blocks) that patrol between two points.
+  - Implement collision: when player touches enemy, reduce HP or restart level.
+
+- Dawn 6:
+  - Add UI text: health, current “zone”, simple HUD using Kaboom text components. [kaboomjs](https://kaboomjs.com)
+  - Show “Game Over” scene when HP reaches zero.
+
+- Dawn 7:
+  - Introduce scene system: `scene("menu")`, `scene("game")`, `scene("gameOver")`.
+  - Create a simple start menu with “Play” button that switches to game scene.
+
+- Dawn 8:
+  - Implement basic pause menu (press `Esc` to pause, show overlay UI).
+  - Add sound effects for jump, enemy hit, etc.
+
+- Dawn 9:
+  - Refactor `game.js` into small modules (e.g., `player.js`, `enemies.js`, `ui.js`) but still bundled via `<script type="module">`.
+  - Add a simple config file for constants (speed, gravity, jump force).
+
+- Dawn 10:
+  - Playtest all basics: moving, jumping, dying, restarting.
+  - Clean up code comments explaining each system for future you.
+
+***
+
+### Dawns 11–20: Core combat and level structure
+
+- Dawn 11:
+  - Add melee attack or ranged attack (e.g., “slash” or “shuriken”).
+  - Implement enemy damage and death (destroy enemy when HP ≤ 0).
+
+- Dawn 12:
+  - Add simple enemy types: slow melee, fast weak, stationary turret.
+  - Tune difficulty by adjusting HP and speed.
+
+- Dawn 13:
+  - Create level 1 layout with clear start, mid, and final “boss” room.
+  - Use tiles/platforms to force movement and positioning decisions.
+
+- Dawn 14:
+  - Implement boss entity: more HP, pattern (e.g., dash attacks, projectiles).
+  - Add boss health bar UI.
+
+- Dawn 15:
+  - Create basic progression between scenes: `menu -> level1 -> boss -> victory`.
+  - Show victory screen with time taken and deaths.
+
+- Dawn 16:
+  - Introduce checkpoint system (respawn points).
+  - Store last checkpoint position and respawn on death instead of full reset.
+
+- Dawn 17:
+  - Add simple environmental hazards: spikes, lasers, falling platforms.
+  - Use tags in Kaboom (e.g., `"hazard"`) to handle common behavior. [kaboomjs](https://kaboomjs.com)
+
+- Dawn 18:
+  - Add basic options menu (music volume, SFX on/off).
+  - Store these preferences in localStorage.
+
+- Dawn 19:
+  - Design level 2 with slightly more complex platforming and more enemies.
+  - Add transitions between levels (fade-in/out or simple text).
+
+- Dawn 20:
+  - Refactor levels into a data-driven structure (array of level definitions).
+  - Ensure adding new levels is mostly tweaking data, not writing new code.
+
+***
+
+### Dawns 21–30: Cybersecurity quests and learning loops
+
+- Dawn 21:
+  - Design 3–5 “cyber tasks” types:
+    - Multiple-choice questions.
+    - “Pick the secure option” choices.
+    - Tiny text puzzles (e.g., identify phishing email).
+  - Just stub them as JS objects for now.
+
+- Dawn 22:
+  - Build a simple in-game “terminal” UI (overlay panel) that pauses gameplay.
+  - Show one cyber question; player answers via keyboard or mouse.
+
+- Dawn 23:
+  - Implement correctness check and rewards:
+    - Correct: grant XP, heal a bit, or buff attack.
+    - Wrong: minor HP loss or temporary debuff.
+
+- Dawn 24:
+  - Connect cyber tasks to level elements:
+    - Reach a console in the map → opens question.
+    - Defeat boss → unlocks “post-boss” cyber quiz.
+
+- Dawn 25:
+  - Introduce “quest” object structure:
+    - Fields like `id`, `title`, `description`, `requirements`, `rewardXP`.
+  - Add a quest log UI panel (simple scrollable text).
+
+- Dawn 26:
+  - Implement quest tracking in memory:
+    - Active quests, completed quests.
+    - Show checkmarks when done.
+
+- Dawn 27:
+  - Create a few sample quests:
+    - “Defeat 10 malware sprites.”
+    - “Pass 3 cyber terminals without failing.”
+    - “Survive the firewall gauntlet.”
+
+- Dawn 28:
+  - Add simple progression gating:
+    - Some levels or bosses require completing specific quests first.
+  - Show locked door with message explaining requirement.
+
+- Dawn 29:
+  - Add “daily missions” concept, but still offline:
+    - Randomly pick a few quests each time game starts.
+    - Mark them as “Daily” in the UI.
+
+- Dawn 30:
+  - Playtest entire learning loop:
+    - Enter level → play → hit terminal → answer cybersecurity question → gain XP/quest progress.
+  - Adjust difficulty and reward values by feel.
+
+***
+
+### Dawns 31–40: Progression, achievements, and local persistence
+
+- Dawn 31:
+  - Create a player profile structure in code:
+    - Fields: name (local), XP, level, completed quests, achievements, settings.
+
+- Dawn 32:
+  - Implement XP and level system:
+    - Formula like \( \text{XP needed} = 100 \times \text{level} \) stored in config (no need for exact math now).
+    - Level up animation + stat boost.
+
+- Dawn 33:
+  - Design 10–15 achievements:
+    - “First Blood” (first enemy kill).
+    - “No Hit Run” (beat a level without damage).
+    - “Phishing Slayer” (perfect score in email quiz).
+
+- Dawn 34:
+  - Implement achievement tracking and unlock events.
+  - Add achievements screen in menu with icons or simple text lines.
+
+- Dawn 35:
+  - Add localStorage saving:
+    - Save profile, XP, level, completed quests, achievements, settings.
+  - Load on game start; handle “no save yet” case.
+
+- Dawn 36:
+  - Add “Reset progress” option that clears localStorage.
+  - Show confirmation dialog to prevent accidental resets.
+
+- Dawn 37:
+  - Introduce basic difficulty modes (Easy/Normal/Hard).
+  - Store chosen difficulty in profile; scale enemy HP/damage accordingly.
+
+- Dawn 38:
+  - Improve UX:
+    - Tooltips or simple help screens.
+    - Explain what XP, quests, achievements do.
+
+- Dawn 39:
+  - Polish visual theme for FirewallSamurai:
+    - Color palette inspired by terminals + neon (but keep asset creation simple).
+    - Simple background layers.
+
+- Dawn 40:
+  - Freeze game scope:
+    - Decide which levels, quests, achievement count you will ship in v1.
+  - Clean up game code and document main systems (movement, combat, quests, save).
+
+***
+
+### Dawns 41–50: PixelRonin website, backend, and integration
+
+- Dawn 41:
+  - Initialize Node.js/Express app in `server/`.
+  - Set up basic Express server serving “Hello PixelRonin” at `/`.
+
+- Dawn 42:
+  - Add templating (EJS or similar) for layout and pages.
+  - Create simple pages: home, register, login, dashboard.
+
+- Dawn 43:
+  - Set up PostgreSQL (local or hosted).
+  - Create tables `users`, `game_profiles`, `achievements`, `quests_completed`.
+
+- Dawn 44:
+  - Implement registration and login with hashed passwords.
+  - Use sessions and cookies to keep users logged in (express-session).
+
+- Dawn 45:
+  - Design REST API endpoints for game:
+    - `POST /api/progress` (XP, level, quests).
+    - `POST /api/achievements` (new unlocks).
+    - `GET /api/profile` (current profile state).
+
+- Dawn 46:
+  - In the game, replace local-only save with hybrid:
+    - Keep localStorage as cache.
+    - When online and logged in, send updates to backend via fetch.
+
+- Dawn 47:
+  - On PixelRonin dashboard:
+    - Show XP, level, completed quests, key achievements pulled from DB.
+  - Add “Continue FirewallSamurai” button that opens game page.
+
+- Dawn 48:
+  - Implement basic authorization checks on API routes (must be logged in).
+  - Ensure users only read/write their own profiles.
+
+- Dawn 49:
+  - Add admin-friendly views (even if only you use them):
+    - Simple page listing users and their levels/progress.
+  - Good for debugging and later certificate verification.
+
+- Dawn 50:
+  - Do a full integration test:
+    - Register user → login → launch FirewallSamurai → play → gain XP → refresh dashboard and see updated stats.
+
+***
+
+### Dawns 51–60: Certificates, polish, and launch
+
+- Dawn 51:
+  - Define certificate criteria:
+    - Minimum level, key quest completions, specific achievements (e.g., “Completed Cyber Defense Arc”).
+  - Add a boolean `has_certificate` or `certificate_level` field in DB.
+
+- Dawn 52:
+  - Build certificate view:
+    - Simple HTML+CSS “certificate” with name, date, completion stats.
+    - Add “Download as PDF” via browser print dialog instructions.
+
+- Dawn 53:
+  - Hook certificate logic:
+    - When user meets criteria, set `has_certificate` in DB.
+    - Show “Claim Certificate” button on dashboard.
+
+- Dawn 54:
+  - Add progress visualization on PixelRonin:
+    - Simple bar for XP to next level.
+    - List of major achievements with tick marks.
+
+- Dawn 55:
+  - Add light analytics:
+    - Log when users start a run, finish a level, fail a quiz.
+    - Store in a simple `events` table for future analysis.
+
+- Dawn 56:
+  - Optimize performance:
+    - Minify JS/CSS, simple bundling.
+    - Compress images and sounds.
+
+- Dawn 57:
+  - Deploy backend and site:
+    - Use a beginner-friendly host (e.g., Render/Railway for Node+Postgres).
+    - Configure environment variables for DB credentials.
+
+- Dawn 58:
+  - Deploy static game assets through the same Express server or a CDN.
+    - Ensure CORS and paths work correctly with `/game` route.
+
+- Dawn 59:
+  - Ask a few friends to play:
+    - Collect feedback on difficulty, clarity of cyber lessons, bugs.
+  - Fix highest-impact issues.
+
+- Dawn 60:
+  - Final polish pass:
+    - Tighten copywriting (PixelRonin + FirewallSamurai lore).
+    - Make sure onboarding tells players: “Play → Learn → Earn certificate”.
+    - Tag and organize your GitHub repo so you can show it in interviews.
+
+***
